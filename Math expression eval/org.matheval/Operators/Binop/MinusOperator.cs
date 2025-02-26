@@ -66,7 +66,12 @@ namespace org.matheval.Operators.Binop
                 decimal rightDecimal = Afe_Common.ToDecimal(right, dc.WorkingCulture);
                 return decimal.Subtract(leftDecimal, rightDecimal);
             }
-            throw new Exception(string.Format(MSG_WRONG_OP_PARAM_EX, new string[] { "MINUS", "numeric" }));
+            else if (left is DateTime && right is DateTime)
+            {
+                return Afe_Common.DateDif((DateTime)right, (DateTime)left, "d");
+            }
+
+                throw new Exception(string.Format(MSG_WRONG_OP_PARAM_EX, new string[] { "MINUS", "numeric" }));
         }
 
         /// <summary>
