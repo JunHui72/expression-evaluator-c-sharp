@@ -384,6 +384,14 @@ namespace org.matheval
 
                     if (paramsValid)
                     {
+                        Dictionary<string, object> argsDict = new Dictionary<string, object>();
+                        for (int i = 0; i < args.Count; i++)
+                        {
+                            // Directly use the argument's ReturnType or its value (if that's the correct approach in your case)
+                            argsDict[$"param{i + 1}"] = args[i];  // No GetValue, just pass the node as-is
+                        }
+
+                        Console.WriteLine(args);
                         CallFuncNode callFuncNode = new CallFuncNode(identifierStr, args, functionInfo.ReturnType, funcExecuter);
                         return callFuncNode;
                     }
@@ -705,6 +713,44 @@ namespace org.matheval
         {
             if (this.Lexer.CurrentToken.Type == TokenType.TOKEN_IDENTIFIER)
             {
+                string identifierStr = this.Lexer.CurrentToken.IdentifierValue.ToUpperInvariant(); // Normalize the identifier
+
+                // Check if the identifier is "DATETIME"
+                if (identifierStr == "DATETIME")
+                {
+                    // Parse the arguments for the DATETIME function (year, month, day)
+                    this.Lexer.GetToken(); // Consume "DATETIME" identifier
+                    if (this.Lexer.CurrentToken.Type != TokenType.TOKEN_PAREN_OPEN)
+                    {
+                        throw new Exception("Expected '(' after DATETIME identifier.");
+                    }
+
+                    this.Lexer.GetToken(); // Consume '('
+
+                    List<Implements.Node> args = new List<Implements.Node>();
+                    while (this.Lexer.CurrentToken.Type != TokenType.TOKEN_PAREN_CLOSE)
+                    {
+                        Implements.Node arg = this.ParseEx(); // Parse the argument (year, month, day)
+                        args.Add(arg);
+
+                        // Handle comma (for multiple arguments)
+                        if (this.Lexer.CurrentToken.Type == TokenType.TOKEN_COMMA)
+                        {
+                            this.Lexer.GetToken(); // Consume the comma and continue parsing next argument
+                        }
+                        else if (this.Lexer.CurrentToken.Type != TokenType.TOKEN_PAREN_CLOSE)
+                        {
+                            throw new Exception("Unexpected token while parsing DATETIME arguments.");
+                        }
+                    }
+
+                    this.Lexer.GetToken(); // Consume ')'
+
+                    // At this point, we have parsed the arguments, now we return a function node for DATETIME
+                    return new CallFuncNode("DATETIME", args, typeof(DateTime), new datetimeFunction());
+                }
+
+                // If the identifier is not DATETIME, fall through to normal identifier handling
                 return this.ParseIdentifier();
             }
             else if (this.Lexer.CurrentToken.Type == TokenType.TOKEN_IF)

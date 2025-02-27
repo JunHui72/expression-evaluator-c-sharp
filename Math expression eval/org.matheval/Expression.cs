@@ -486,6 +486,7 @@ namespace org.matheval
                     throw new Exception(string.Format(Afe_Common.MSG_VAR_NOTSET, new string[] { varNode.Name }));
                 }
                 Object value = VariableParams[varNode.Name.ToLowerInvariant()];
+                Console.WriteLine($"Variable: {varNode.Name}, Value: {value}");
                 //if (value is decimal)
                 if (Afe_Common.IsNumber(value))
                 {
@@ -553,8 +554,17 @@ namespace org.matheval
             foreach (Implements.Node expr in callFunc.args)
             {
                 i++;
+                object value = VisitNode(expr);
                 argsMap.Add(i.ToString(), VisitNode(expr));
+                Console.WriteLine($"{i.ToString()}: {value}");
             }
+
+            Console.WriteLine("argsMap:");
+            foreach (var kvp in argsMap)
+            {
+                Console.WriteLine($"param{kvp.Key}: {kvp.Value}");
+            }
+
             return callFunc.Excuter.Execute(argsMap, Dc);
         }
 

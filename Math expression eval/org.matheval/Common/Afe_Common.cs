@@ -606,6 +606,10 @@ namespace org.matheval.Common
         /// </summary>
         public const string Const_Find = "find";
 
+        /// <summary>
+        /// Function Datetime
+        /// </summary>
+        public const string Const_Datetime = "datetime";
 
         #endregion
 

@@ -58,6 +58,9 @@ namespace UnitTest
 
             Expression expr4 = new Expression("17769832984123423.82372423-1");
             Assert.AreEqual(17769832984123422.823724m, expr4.Eval<decimal>());
+
+            Expression expr5 = new Expression("DATETIME(2021,2,28)-DATETIME(2021,2,21)");
+            Assert.AreEqual(7.000, expr5.Eval());
         }
 
         [TestMethod]

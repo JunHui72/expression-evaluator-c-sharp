@@ -68,7 +68,11 @@ namespace org.matheval.Operators.Binop
             }
             else if (left is DateTime && right is DateTime)
             {
-                return Afe_Common.DateDif((DateTime)right, (DateTime)left, "d");
+                // Calculate the difference between two DateTime values and return a TimeSpan
+                DateTime leftDate = (DateTime)left;
+                DateTime rightDate = (DateTime)right;
+                TimeSpan timeSpan = leftDate - rightDate; // Subtraction between two DateTime results in TimeSpan
+                return timeSpan.TotalDays; // Return the difference in days (as double)
             }
 
                 throw new Exception(string.Format(MSG_WRONG_OP_PARAM_EX, new string[] { "MINUS", "numeric" }));
@@ -84,8 +88,8 @@ namespace org.matheval.Operators.Binop
         {
             if (
                 (typeLeft.Equals(typeof(object)) && typeRight.Equals(typeof(object))) ||
-                (typeLeft.Equals(typeof(object)) && typeRight.Equals(typeof(decimal))) 
-                )
+                (typeLeft.Equals(typeof(object)) && typeRight.Equals(typeof(decimal))) || 
+                (typeLeft.Equals(typeof(DateTime)) && typeRight.Equals(typeof(DateTime))))
             {
                 return typeof(object);
             }
