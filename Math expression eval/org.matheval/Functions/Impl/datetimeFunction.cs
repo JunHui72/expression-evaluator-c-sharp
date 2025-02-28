@@ -25,7 +25,10 @@ namespace org.matheval.Functions
             int year = Convert.ToInt32(args["1"]);
             int month = Convert.ToInt32(args["2"]);
             int day = Convert.ToInt32(args["3"]);
-            return new DateTime(year, month, day);
+            int hour = args.ContainsKey("4") ? Convert.ToInt32(args["4"]) : 0;
+            int minute = args.ContainsKey("5") ? Convert.ToInt32(args["5"]) : 0;
+            int second = args.ContainsKey("6") ? Convert.ToInt32(args["6"]) : 0;
+            return new DateTime(year, month, day, hour, minute, second);
         }   
     }
 }
